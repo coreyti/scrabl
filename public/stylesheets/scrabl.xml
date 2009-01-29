@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xbl="http://www.w3.org/ns/xbl">
+  <xbl:binding id='container'>
+    <xbl:resources xml:base="/public/images/">
+      <xbl:prefetch src="corner_ne.png" />
+      <xbl:prefetch src="corner_nw.png" />
+      <xbl:prefetch src="corner_se.png" />
+      <xbl:prefetch src="corner_sw.png" />
+
+      <xbl:style><![CDATA[
+
+        /* Container (variables)                                                     */
+        /* ========================================================================= */
+
+          .container {
+            background-image: url(corner_nw.png);
+          }
+
+          .container:before {
+            background-image: url(corner_ne.png);
+          }
+
+          .container:after {
+            /* NOTE: IE's .container:after { height } must match these images.
+                     relevant modifications should be made in screen-doors.ie.css */
+
+            background-image: url(corner_se.png);
+            content:          url(corner_sw.png);
+          }
+
+
+        /* Container (foundation)                                                    */
+        /* ========================================================================= */
+
+          /* NOTE: firefox up to version 3.1 (exclusive?) does not support
+                   positioning of pseudo-elements (see the last commit for example),
+                   which is why you'll see crazy margins and overflow here.
+
+                   on the other hand, where the last commit also required framework
+                   styling of the "content" div and six images (when making borders),
+                   this version adds no styling to that content element and needs
+                   only four images. */
+
+          .container {
+            background-position:  top left;
+            background-repeat:    no-repeat;
+            position:             relative;
+            overflow:             hidden;
+          }
+
+          .container:before {
+            background-position:  top right;
+            background-repeat:    no-repeat;
+            height:               0;
+            width:                100%;
+            margin-bottom:        -10000px;
+            padding-bottom:       10000px;
+            display:              block;
+            content:              '';
+          }
+
+          .container:after {
+            /* NOTE: background-position must be top for IE (and is ok for others) */
+
+            background-position:  top right; 
+            background-repeat:    no-repeat;
+            width:                100%;
+            display:              block;
+          }
+
+          .container > * {
+            margin:     0 !important;
+            position:   relative;
+            z-index:    10;
+          }
+        ]]></xbl:style>
+    </xbl:resources>
+
+    <xbl:implementation><![CDATA[
+      ({
+        get_style: function(element, property) {
+          if(element.currentStyle) {
+            var result = element.currentStyle[property];
+          }
+          else if(window.getComputedStyle) {
+            var result = document.defaultView.getComputedStyle(element, null).getPropertyValue(property);
+          }
+          return result;
+        },
+
+        xblBindingAttached: function() {
+          var element = this.boundElement;
+          var content = element.getElementsByClassName('xbl-content-container')[0];
+          var styles  = {
+                          'padding-top':    this.get_style(element, 'padding-top'),
+                          'padding-right':  this.get_style(element, 'padding-right'),
+                          'padding-bottom': this.get_style(element, 'padding-bottom'),
+                          'padding-left':   this.get_style(element, 'padding-left')
+                        }
+          
+          element.style.padding = '0';
+
+          content.style.paddingTop    = styles['padding-top'];
+          content.style.paddingRight  = styles['padding-right'];
+          content.style.paddingBottom = styles['padding-bottom'];
+          content.style.paddingLeft   = styles['padding-left'];
+        }
+      })
+    ]]></xbl:implementation>
+
+    <xbl:template>
+      <div class='container'>
+        <div class='content'>
+          <xbl:content />
+        </div>
+      </div>
+    </xbl:template>
+  </xbl:binding>
+</xbl:xbl>

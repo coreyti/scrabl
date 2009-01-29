@@ -57,6 +57,7 @@
 /* ========================================================================= */
 
   body {
+    font: 10px "Lucida Grande", "Trebuchet MS", Verdana, sans-serif;
     background: #DDF;
   }
 
@@ -75,14 +76,11 @@
     border:     1px solid #999;
   }
   
-  div.content {
+  div.section {
     float:      left;
     background: #DCF;
     margin:     10px;
-    width:      459px;
-  }
-  
-  div.padded {
+    width:      439px;
     padding:    10px;
   }
 

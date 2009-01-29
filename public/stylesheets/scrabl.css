@@ -1,0 +1,8 @@
+
+/* Containers                                                                */
+/* ========================================================================= */
+
+  div.section {
+    binding: url("/public/stylesheets/scrabl.xml#container");
+  }
+
